@@ -1,0 +1,10 @@
+syntax = "proto3" ; 
+package pb ; 
+option go_package = "github.com/neo4j_golang/pb" ; 
+
+
+message User {
+    int64 to = 1 ;
+    int64 from = 2 ; 
+    string methode = 3 ; 
+}

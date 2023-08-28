@@ -1,0 +1,122 @@
+syntax = "proto3" ; 
+package pb ; 
+option go_package ="github.com/neo4j_golang/pb"; 
+
+
+message transfer_node {
+ int64 to = 1 ; 
+ int64 from = 2 ; 
+     string methode = 3 ;
+}
+message node_tranfered {
+   int64 to = 1 ; 
+ int64 from = 2 ; 
+}
+message TestHeadRequest {
+    int64 head = 1;
+    string err = 2 ; 
+}
+
+message TestHeadResponse {
+    bool result = 1;
+}
+message List_nodes_Request {
+    int64 id = 1;
+}
+
+message List_nodes_Response {
+    repeated Node nodes = 1;
+}
+
+message List_nodes_with_relation_Request {
+    int64 to_change= 1;
+    int64 father =2 ; 
+    string relation_name = 3 ; 
+
+}
+
+message List_nodes_with_relation_Response {
+    repeated Node nodes = 1;
+    string err = 2 ; 
+}
+
+message Node {
+    int64 id = 1;
+    string name = 2;
+}
+message Delete_relation_request {
+    repeated Node start_node = 1;
+    repeated Node end_nodes = 2;
+}
+message Delete_relation_response {
+   string err = 1 ; 
+}
+
+message Move_from_to_direct_request {
+    int64 from_node= 1  ; 
+    int64 to_node= 2 ; 
+}
+message Move_from_to_direct_response {
+   string err =1 ; 
+}
+
+
+
+
+message Parent_node_request{
+    int64 from_node = 1 ; 
+}
+message Parent_node_response {
+    repeated Node node = 1 ; 
+    string err = 2 ; 
+ } 
+
+  
+message Create_indirect_relations_Request {
+    repeated Node target_nodes = 1;
+    repeated Node end_nodes = 2;
+}
+message Create_indirect_relations_Response {
+    string err =1 ; 
+}
+
+message Create_direct_relations_Request {
+    repeated Node target_nodes = 1;
+    repeated Node end_nodes = 2;
+}
+message Create_direct_relations_Response {
+    string err = 1 ; 
+}
+
+
+
+
+message Create_indirect_relations_single_to_many_Request{
+    repeated Node target_nodes = 1 ; 
+    int64 end_node = 2 ; 
+}
+message Create_indirect_relations_single_to_many_Response {
+
+    string err = 1 ; 
+}
+
+// func GetNodeWithDirectRelationship(driver neo4j.Driver, from_node int) (*Node, error) {   
+message GetNodeWithDirectRelationship_Request {
+    int64 from_node = 1 ; 
+}
+
+message GetNodeWithDirectRelationship_Response{
+  repeated Node node = 1  ; 
+  string err =2 ; 
+}
+ 
+
+
+
+message Recursion_getNodeWithDicRelation_Request {
+    int64 from_node = 1 ; 
+}
+message Recursion_getNodeWithDicRelation_Response {
+    repeated Node node=1 ;
+    string err = 2 ; 
+}

@@ -1,0 +1,194 @@
+<html lang="en"><head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+              font-family: 'Inter', sans-serif; 
+        }
+
+        #sidebar {
+            width: 150px; /* Adjusted width */
+            height: 95vh;
+            background-color: #F69421; /* Changed color */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        #adminPic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin-bottom: 20px;
+            /* Add background image if you have one */
+            /* background-image: url('path_to_admin_pic.jpg'); */
+            /* background-size: cover; */
+        }
+          #adminText {
+            font-weight: bold;
+              margin-top: -450px; 
+              color : black ; 
+              font-size : 25px ; 
+        }
+
+        #logoutBtn {
+             background-color: #78A2D4; /* Changed background color */
+            color: black;
+            border: none;
+            padding: 10px 45px; /* Adjusted padding */
+            border-radius: 10px;
+            font-weight: bold; /* Added font weight */
+            cursor: pointer;
+            font-family: 'Inter', sans-serif; /* Added font family */
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+        }
+
+
+
+            input[type="text"] {
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+            background-color: #D9D9D9;
+        }
+
+        /* Modern button styles */
+        button {
+            background-color: #65E67A;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif; 
+                font-weight: bold; /* Added font weight */
+        }
+            select {
+            appearance: none;
+            border: none;
+            border-radius: 5px;
+            padding: 9px;
+            background-color: #D9D9D9;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: #333; /* Text color */
+        }
+
+        select:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div id="adminPic"></div>
+<div id="adminText">Admin User</div> 
+        <button id="logoutBtn">Log Out</button>
+    </div>
+    <div id="content">
+         <h1 style="color: red; font-weight: bold;">Admin Interface</h1>
+        <h2>Delete User</h2>
+        <input type="text" id="userId" placeholder="User ID">
+        <button onclick="deleteUser()">Delete User</button>
+
+        <h2>Add User</h2>
+        <input type="text" id="addUserName" placeholder="Username">
+        <input type="text" id="addid" placeholder="id to add to">
+        <button onclick="addUser()">Add User</button>
+
+        <h2>Transfer node </h2>
+        <input type="text" id="transferUserId" placeholder="To User ID">
+        <input type="text" id="sourceNode" placeholder="Source Node">
+<select id="transferMethod">
+    <option value="selectMethod" disabled="" selected="">Select Method ▼</option>
+    <option value="with">With Kids</option>
+    <option value="without">Without Kids</option>
+</select>
+        <button onclick="transferUser()">Transfer User</button>
+    </div>
+
+    <script>
+        function deleteUser() {
+            const userId = document.getElementById("userId").value;
+
+            fetch("http://localhost:8087/v1/Deleteuser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: parseInt(userId) }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.err === "") {
+                        alert(`User with ID ${data.id} deleted successfully.`);
+                    } else {
+                        alert(`Error deleting user: ${data.err}`);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+
+                function addUser() {
+                        const userName = document.getElementById("addUserName").value;
+                        const id = document.getElementById("addid").value;
+
+                        fetch("http://localhost:8089/v1/Adduser", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ to : id , name : userName }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.err === "") {
+                                    alert(`User added successfully.`);
+                                } else {
+                                    alert(`Error adding user: ${data.err}`);
+                                }
+                            })
+                            .catch(error => console.error(error));
+                    }
+
+                      function transferUser() {
+                            const userId = document.getElementById("sourceNode").value;
+                            const targetAccountId = document.getElementById("transferUserId").value;
+                          const method = document.getElementById("transferMethod").value;
+                          
+                            fetch("http://localhost:8088/v1/transfer_user", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({ to : parseInt(targetAccountId) ,from : parseInt(userId) , methode: method }),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.err === "") {
+                                        alert(`User with ID ${data.userId} transferred to Account ID ${data.targetAccountId} successfully.`);
+                                    } 
+                                })
+                               
+                        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+version: '3.9'
+
+
+
+
+services:
+
+ # dnsmasq:
+  #   image:  jpillora/dnsmasq
+   #  ports:
+   #  - "53:53/udp"
+    # - "53:53/tcp"
+    # - "8080:8080"
+     #env_file:
+     #- .env
+
+
+
+  message-broker:
+    image: rabbitmq:3-management-alpine
+    container_name: message-broker
+    ports:
+      - 5672:5672   # for sender and consumer connections
+      - 15672:15672 # for serve RabbitMQ GUI
+    environment:
+            RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - ${HOME}/dev-rabbitmq/data/:/var/lib/rabbitmq
+      - ${HOME}/dev-rabbitmq/log/:/var/log/rabbitmq
+    restart: always
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j_db
+    command: neo4j console --verbose
+    environment:
+      - NEO4J_AUTH=neo4j/12345678
+    ports:
+      - "7474:7474"  #HTTP port
+      - "7687:7687"  #Bolt port
+    volumes:
+      - ./data:/data
+      - ./import:/import
+  
+  
+
+  microservice_grpc1:
+    build:
+      context: ./add_user_microservice
+      dockerfile: Dockerfile
+    ports:
+      - "9099:9099" # gRPC port
+      - "8089:8089" # RESTful port
+    
+
+  
+
+  microservice_admin:
+    build:
+      context: ./admin_microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./admin_microservice:/usr/share/nginx/html
+   
+
+
+
+
+  microservice_grpc3:
+    build:
+      context: ./transfer_user_microservice
+      dockerfile: Dockerfile
+    ports:
+      - "9098:9098" # gRPC port
+      - "8088:8088" # RESTful port
+   
+
+  
+
+
+  microservice_grpc2:
+    build:
+      context: ./delete_microservice
+      dockerfile: Dockerfile
+    ports:
+      - "9097:9097" # gRPC port
+      - "8087:8087" # RESTful port
+    
+  
+    
+   
+
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+   
+
+  authelia:
+    container_name: authelia
+    image: authelia/authelia
+    restart: unless-stopped
+   
+    expose:
+      - 9091
+    ports:
+      - '9091:9091'
+    volumes:
+      - ./data/authelia/config:/config
+    environment:
+    
+      TZ: 'Australia/Melbourne'
+      
+
+
+
+
+
+volumes:
+  postgres_data:
+   
+ 

@@ -1,0 +1,17 @@
+syntax = "proto3" ; 
+package pb ; 
+option go_package ="github.com/neo4j_golang/pb"; 
+
+
+
+
+message addUser_request {
+    int64 to = 1 ; 
+    string  name = 2 ; 
+}
+message addUser_response {
+    int64 new_id = 1 ;
+    string name = 2 ;  
+    string err = 3  ; 
+}
+

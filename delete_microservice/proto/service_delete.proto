@@ -1,0 +1,29 @@
+
+syntax = "proto3" ; 
+package pb ; 
+option go_package = "github.com/delete_user/pb" ; 
+import "google/api/annotations.proto" ; 
+
+import "rpc_delete.proto" ; 
+service add {
+   
+     rpc Deleteuser(deleteUser_request) returns (deleteUser_response) {
+        option (google.api.http) = { 
+            post: "/v1/Deleteuser"
+            body: "*"  
+        }; 
+
+
+
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+}

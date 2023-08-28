@@ -1,0 +1,25 @@
+syntax = "proto3" ; 
+package pb ; 
+option go_package = "github.com/neo4j_golang/pb" ; 
+import "google/api/annotations.proto" ; 
+
+import "rpc_add.proto" ; 
+service add {
+   
+     rpc Adduser(addUser_request) returns (addUser_response) {
+        option (google.api.http) = { 
+            post: "/v1/Adduser"
+            body: "*"  
+        }; 
+
+
+
+        
+    }
+    
+    
+    
+    
+    
+ 
+}

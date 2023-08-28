@@ -1,0 +1,16 @@
+syntax = "proto3" ; 
+package pb ; 
+option go_package ="github.com/delete_user/pb"; 
+
+
+
+
+message deleteUser_request {
+    int64 id = 1 ; 
+
+}
+message deleteUser_response {
+    int64 id = 1 ;
+    string err  = 2 ;  
+
+}
