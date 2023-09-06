@@ -46,10 +46,10 @@ if err != nil {
 	}
 response := &pb.AddUserResponse{
 			NewId: res.ID ,
-			Err:   "no error" ,
+			Err:   "" ,
 		}
 
-
+utils.Add_json(int(req.To) , req.Name , int(response.NewId))
 
 	return response, nil
 }

@@ -22,6 +22,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 # Copy and move your own website file to the nginx html folder
 COPY index.html /usr/share/nginx/html
+
 # Copy the "app" configuration file
 COPY app.env /app/app
 

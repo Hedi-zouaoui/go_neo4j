@@ -54,7 +54,7 @@ func runGatewayServer(config utils.Config ){
 }
 //////////// 
     corsMiddleware := cors.New(cors.Options{
-        AllowedOrigins: []string{"http://localhost:8080" , "https://admin.myapp.com"  }, // Change this to your frontend URL
+        AllowedOrigins: []string{"http://localhost:8080" , "https://admin.myapp.com" , "http://localhost:8012"  }, // Change this to your frontend URL
         AllowedMethods: []string{"POST"},
     })
 	//////////

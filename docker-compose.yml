@@ -52,6 +52,8 @@ services:
     ports:
       - "9099:9099" # gRPC port
       - "8089:8089" # RESTful port
+    volumes:
+      - shared-volume:/home
     
 
   
@@ -64,6 +66,17 @@ services:
       - "8080:80"
     volumes:
       - ./admin_microservice:/usr/share/nginx/html
+
+
+ # microservice_visualization:
+  #  build:
+   #   context: ./visualization
+    #  dockerfile: Dockerfile
+    #ports:
+     # - "7070:80"
+    #volumes:
+     # - ./visualization:/usr/share/nginx/html
+      #- shared-volume:/partage
    
 
 
@@ -126,6 +139,10 @@ services:
 
 
 volumes:
-  postgres_data:
-   
+  shared-volume:
+    driver: local
+    #driver_opts:
+     # type: none
+      #o: bind
+      #device: ./shared-volume
  

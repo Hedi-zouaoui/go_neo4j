@@ -1,19 +1,22 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
+
 type Node struct {
-	ID   int64 `json:"id"`
+	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
 type Transfer_node struct {
-  To  int64
-From  int64 
-      Methode string
+	To      int64
+	From    int64
+	Methode string
 }
 
 func CreateNode(driver neo4j.Driver, name string) (*Node, error) {
@@ -58,38 +61,35 @@ func CreateNode(driver neo4j.Driver, name string) (*Node, error) {
 	return nil, fmt.Errorf("failed to create node")
 }
 
-
-func TransferNode(driver neo4j.Driver, req Transfer_node ) ( Transfer_node) {
-		session := driver.NewSession(neo4j.SessionConfig{})
+func TransferNode(driver neo4j.Driver, req Transfer_node) Transfer_node {
+	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
 	from := []Node{
-		{ID: req.From , Name: "x"},
+		{ID: req.From, Name: "x"},
 	}
 
 	to := []Node{
-		{ID: req.To  , Name: "x"},
+		{ID: req.To, Name: "x"},
 	}
 
 	t4, _ := Test_head(driver, int64(to[0].ID))
 	fmt.Println("test t4", t4)
 	if !t4 {
-fmt.Println("le to est le head de l arbre ")
-err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
+		fmt.Println("le to est le head de l arbre ")
+		err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
 		if err != nil {
 			log.Fatal(err)
 		}
-		return  req 
+		return req
 
-	} 
-		p2, _ := Parent_node(driver, int(to[0].ID))
+	}
+	p2, _ := Parent_node(driver, int(to[0].ID))
 	t2, _ := Test_head(driver, int64(p2.ID))
 	fmt.Println("test t2", p2)
-	if !t2  { /* le parent de TO est le HEAD de l arbre  */
+	if !t2 { /* le parent de TO est le HEAD de l arbre  */
 		fmt.Println("le parent de destination est le HEAD de l arbre")
 
-		
-
-err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
+		err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -102,24 +102,18 @@ err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
 		if err != nil {
 			log.Fatal(err)
 		}
-	return  req 
+		return req
 	}
 
+	if t4 && t2 {
 
-if t4 && t2 {
-
-
-
-	fmt.Println("normal case ")
-
-	
-
+		fmt.Println("normal case ")
 
 		err := Move_from_to_direct(driver, int(from[0].ID), int(to[0].ID))
 		if err != nil {
 			log.Fatal(err)
 		}
-			parent, err := Parent_node(driver, int(to[0].ID))
+		parent, err := Parent_node(driver, int(to[0].ID))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -136,12 +130,8 @@ if t4 && t2 {
 			log.Fatal(err)
 		}
 
-	
-
-
-
-}
-	return  req
+	}
+	return req
 
 }
 
@@ -208,53 +198,6 @@ func List_nodes_indirect(driver neo4j.Driver, father int) (*[]Node, error) {
 	return &nodes, nil
 
 }
-func List_nodes_with_relation(driver neo4j.Driver, to_change int64 , father *int64, relation_name string) (*[]Node, error) {
-	session := driver.NewSession(neo4j.SessionConfig{})
-	defer session.Close()
-	var result neo4j.Result
-	var err error
-	if relation_name == "indirect" {
-		result, err = session.Run("MATCH (n2)-[:indirect]->(n1), (n2)-[:indirect]->(n3) WHERE id(n1) = $to_change AND id(n3) = $father RETURN id(n2) AS id, n2.name AS name", map[string]interface{}{
-			"to_change":     to_change,
-			"father":        *father,
-			"relation_name": relation_name,
-		})
-
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		result, err = session.Run("MATCH (child)-[r1:direct]->(node) WHERE id(node) = $to_change RETURN id(child) AS id , child.name AS name ", map[string]interface{}{
-			"to_change": to_change,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-	}
-	nodes := []Node{}
-	for result.Next() {
-		record := result.Record()
-		 ID , ok := record.Get("id")
-		if !ok {
-			return nil, fmt.Errorf("failed to retrieve node id")
-		}
-
-		Name, ok := record.Get("name")
-		if !ok {
-			return nil, fmt.Errorf("failed to retrieve node name")
-		}
-
-		node := Node{
-			ID:   ID.(int64),
-			Name: Name.(string),
-		}
-		nodes = append(nodes, node)
-	}
-
-	return &nodes, nil
-}
-
 func Delete_relation(driver neo4j.Driver, start_node *[]Node, end_nodes *[]Node) error {
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
@@ -262,8 +205,8 @@ func Delete_relation(driver neo4j.Driver, start_node *[]Node, end_nodes *[]Node)
 	for _, node := range *end_nodes {
 		for _, node2 := range *start_node {
 			_, err := session.Run("MATCH (node1) WHERE id(node1) = $end_node MATCH (node2) WHERE id(node2) = $start_node MATCH (node1)-[r]-(node2) DELETE r ", map[string]interface{}{
-				"start_node": node2.ID		,
-				"end_node":   node.ID		,
+				"start_node": node2.ID,
+				"end_node":   node.ID,
 			})
 			if err != nil {
 				return err
@@ -438,4 +381,72 @@ func Recursion_getNodeWithDicRelation(driver neo4j.Driver, from_node int) (*[]No
 
 	return nil, nil
 
+}
+
+type node struct {
+	Name     string `json:"name"`
+	Value    Value  `json:"value"`
+	Children []node `json:"children"`
+}
+
+type Value struct {
+	Name string `json:"name"`
+	ID   int    `json:"id"`
+}
+
+func Add_json(ParentID int, name string, id int) {
+	// Read the existing JSON data from the file
+	jsonFile := "/home/test.json"
+	data, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		log.Fatalf("Error reading JSON file: %v", err)
+	}
+
+	// Unmarshal the JSON data into a slice of node structs
+	var nodes []node
+	if err := json.Unmarshal(data, &nodes); err != nil {
+		log.Fatalf("Error unmarshaling JSON data: %v", err)
+	}
+
+	// Example: Create a new child node and add it to the parent with ID 3
+	parentID := ParentID
+	newChild := node{
+		Name:     name,
+		Value:    Value{Name: name, ID: id},
+		Children: []node{
+			// Add more children here if needed
+		},
+	}
+
+	if err := AddChildToNode(&nodes, parentID, newChild); err != nil {
+		log.Fatalf("Error adding child to node: %v", err)
+	}
+
+	// Marshal the updated data back to JSON
+	updatedData, err := json.MarshalIndent(nodes, "", "  ")
+	if err != nil {
+		log.Fatalf("Error marshaling JSON data: %v", err)
+	}
+
+	// Write the updated JSON data back to the file
+	if err := ioutil.WriteFile(jsonFile, updatedData, 0644); err != nil {
+		log.Fatalf("Error writing JSON file: %v", err)
+	}
+
+	fmt.Println("Child added and JSON file updated successfully.")
+}
+
+// AddChildToNode adds a new child node to the node with the specified ID.
+func AddChildToNode(nodes *[]node, nodeID int, child node) error {
+	for i, node := range *nodes {
+		if node.Value.ID == nodeID {
+			(*nodes)[i].Children = append(node.Children, child)
+			return nil
+		}
+		// Recursively search for the parent node within children
+		if err := AddChildToNode(&((*nodes)[i].Children), nodeID, child); err == nil {
+			return nil
+		}
+	}
+	return fmt.Errorf("node with ID %d not found", nodeID)
 }

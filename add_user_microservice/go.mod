@@ -3,7 +3,6 @@ module github.com/add_user
 go 1.20
 
 require (
-	github.com/antihax/optional v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
 	github.com/neo4j/neo4j-go-driver v1.8.3
 	github.com/neo4j/neo4j-go-driver/v4 v4.4.7
@@ -14,7 +13,7 @@ require (
 	google.golang.org/protobuf v1.30.0
 )
 
-require github.com/rs/cors v1.9.0 // indirect
+require github.com/rs/cors v1.9.0
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
@@ -23,7 +22,6 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/neo4j/neo4j-go-driver/v5 v5.11.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect

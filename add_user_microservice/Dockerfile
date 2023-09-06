@@ -32,6 +32,9 @@ WORKDIR /app
 # Copy the binary from the builder stage to the final container
 COPY --from=builder  /app/bin .
 COPY --from=builder /app/app .
+COPY utils/test.json /home
+
+
 
 # Expose the gRPC and RESTful ports used by the microservice
 EXPOSE 9097 8087

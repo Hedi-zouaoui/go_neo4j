@@ -31,7 +31,7 @@
             background-color: #fff;
             margin-bottom: 20px;
             /* Add background image if you have one */
-            /* background-image: url('path_to_admin_pic.jpg'); */
+             background-image: url('admin_user.png'); 
             /* background-size: cover; */
         }
           #adminText {
@@ -50,6 +50,7 @@
             font-weight: bold; /* Added font weight */
             cursor: pointer;
             font-family: 'Inter', sans-serif; /* Added font family */
+            font-size: 10px;
         }
 
         #content {
@@ -97,9 +98,20 @@
 <body>
     <div id="sidebar">
         <div id="adminPic"></div>
-<div id="adminText">Admin User</div> 
-        <button id="logoutBtn">Log Out</button>
+<div id="adminText">Admin User
+    <br>
+    <br>
+    
+    <a href="http://localhost:8000/" id="visualizationButton" style="text-decoration: none;">
+        <button style="background-color: #65E67A; color: black; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: bold;">
+            Visualization
+        </button>
+    </a>
+</div> 
+<a href="https://auth.myapp.com/logout" id="logoutBtn" class="button">Log Out</a>
+
     </div>
+   
     <div id="content">
          <h1 style="color: red; font-weight: bold;">Admin Interface</h1>
         <h2>Delete User</h2>
