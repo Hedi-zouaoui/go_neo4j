@@ -8,7 +8,7 @@ microservice_go
 │  ├─ bin
 │  ├─ Dockerfile
 │  ├─ gapi
-│  │  ├─ rpc_add.go
+│  │  ├─ rpc_add
 │  │  └─ server.go
 │  ├─ go.mod
 │  ├─ go.sum
