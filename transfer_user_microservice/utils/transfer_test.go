@@ -28,7 +28,7 @@ func TestTest_head(t *testing.T) {
 	session.Close()
 
 	// Test the Test_head function
-	headNodeID := int64(0) // Use the node ID you created
+	headNodeID := int64(0) // Use the node ID you 
 	relationshipExists, err := Test_head(driver, headNodeID)
 
 	// Check for errors
