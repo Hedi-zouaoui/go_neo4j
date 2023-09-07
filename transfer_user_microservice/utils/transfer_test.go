@@ -19,7 +19,7 @@ func TestTest_head(t *testing.T) {
 	}
 	defer driver.Close()
 
-	// Create a node with a direct relationship in the test database
+	// Create a node with a direct relationship in the test d
 	session := driver.NewSession(neo4j.SessionConfig{})
 	_, err = session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
 		_, err := tx.Run("CREATE (node1)-[:direct]->(node2) RETURN node1, node2", nil)
