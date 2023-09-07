@@ -395,7 +395,7 @@ type Value struct {
 }
 
 func Add_json(ParentID int, name string, id int) {
-	// Read the existing JSON 
+	
 	jsonFile := "/home/test.json"
 	data, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
