@@ -13,7 +13,7 @@ jobs:
       neo4j:
         image: neo4j:latest
         env:
-          NEO4J_AUTH: neo4j/password # Change the username and password as needed
+          NEO4J_AUTH: neo4j/12345678 # Change the username and password as needed
         ports:
           - 7687:7687
         options: --health-cmd "curl --fail http://localhost:7474 || exit 1"
