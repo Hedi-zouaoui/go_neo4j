@@ -17,6 +17,8 @@ stages:
   - release
 
 lint:
+    tags: 
+       - build 
     image: golangci/golangci-lint:latest
     stage: lint
     extends: .go-cache
