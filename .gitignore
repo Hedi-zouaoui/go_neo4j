@@ -1,2 +1,2 @@
-checkpoint.0
-neostore.transaction.db.0
+data/transactions/neo4j/neostore.transaction.db.0
+data/transactions/system/neostore.transaction.db.0
