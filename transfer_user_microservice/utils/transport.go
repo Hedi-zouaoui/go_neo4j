@@ -40,7 +40,7 @@ func Test_head(driver neo4j.Driver, head int64) (bool, error) {
 		return relationshipExists.(bool), nil
 	}
 
-	return false, nil //  not found
+	return false, nil //  not foun
 
 }
 
