@@ -36,7 +36,7 @@ func TestTest_head(t *testing.T) {
 		t.Errorf("Expected no error, but got: %v", err)
 	}
 
-	// Check if the relationship exists as expected
+	// Check if the relationship exist as expected
 	if !relationshipExists {
 		t.Error("Expected relationship to exist, but it does not")
 	}
