@@ -32,7 +32,7 @@ func TestParentNode(t *testing.T) {
 
 	t.Run("non_existing_parent", func(t *testing.T) {
 		// Test case for non-existing node
-		got, err := Parent_node(mockDriver, 0) // Assuming node with ID 99 doesn't exist
+		got, err := Parent_node(mockDriver, 0) 
 		if err == nil {
 			t.Fatalf("Expected error, but got nil")
 		}
