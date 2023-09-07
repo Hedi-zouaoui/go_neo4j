@@ -10,63 +10,40 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      neo4j:
-        image: neo4j:latest
+      neo4j: 
+        # Docker Hub image
+        image: neo4j
+
         env:
-          NEO4J_AUTH: neo4j/12345678 # Change the username and password as needed
+            NEO4J_AUTH : neo4j/12345678
+          
         ports:
-          - 7687:7687
-        options: --health-cmd "curl --fail http://localhost:7474 || exit 1"
+            - "7474:7474"  #HTTP port
+            - "7687:7687"  #Bolt port
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16 # Adjust the Go version as needed
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+    - name: Set up Go and Initialize Module
+      run: |
+       
+          
+          go get  ./...
+        
+   
 
-      - name: Assess Code Syntax (Optional)
-        run: |
-          # You can use a Go linter like 'golangci-lint' here
-          go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-          golangci-lint run
-        continue-on-error: true
+    - name: Build
+      run: |
+           go build -v ./add_user_microservice
+           go build -v ./admin_microservice
+           go build -v ./delete_microservice
+           go build -v ./mlmcli
+           go build -v ./transfer_user_microservice
+           go build -v ./visualization
 
-      - name: Run Unit Tests with Neo4j
-        run: |
-          # Start the Neo4j service
-          docker-compose up -d neo4j
-
-          # Run your Go unit tests that interact with Neo4j
-          go test ./...
-
-          # Stop the Neo4j service
-          docker-compose down
-        env:
-          NEO4J_URI: "bolt://localhost:7687"
-          NEO4J_USERNAME: "neo4j"
-          NEO4J_PASSWORD: "12345678"
-
-      - name: Build Binaries
-        run: go build -o myapp
-
-      - name: Build Docker Image
-        run: |
-          # Build a Docker image for your Go application
-          docker build -t myapp-image .
-        continue-on-error: true
-
-      - name: Push Docker Image to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-        continue-on-error: true
-
-      - name: Push Docker Image
-        run: |
-          # Push the Docker image to Docker Hub
-          docker push yourusername/myapp-image:latest
-        continue-on-error: true
+    - name: Test
+      run: go test -v ./...
