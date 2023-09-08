@@ -3,3 +3,5 @@ data/transactions
 neo4j/data
 neo4j
 /neo4j
+data
+/data
