@@ -31,8 +31,8 @@ services:
       - ${HOME}/dev-rabbitmq/log/:/var/log/rabbitmq
     restart: always
   neo4j:
-    image: neo4j:latest
-    container_name: neo4j_db
+    image: neo4j:4.4.19
+    container_name: neo4j
     command: neo4j console --verbose
     environment:
       - NEO4J_AUTH=neo4j/12345678
@@ -40,7 +40,7 @@ services:
       - "7474:7474"  #HTTP port
       - "7687:7687"  #Bolt port
     volumes:
-      - ./data:/data
+      - ./neo4j/data:/data
       - ./import:/import
   
   
