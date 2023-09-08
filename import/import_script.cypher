@@ -1,4 +1,4 @@
-LOAD CSV WITH HEADERS FROM "file:///import/advisors.csv" AS row
+LOAD CSV WITH HEADERS FROM "file:///advisors.csv" AS row
 MERGE (parrain:Node {name: toString(row.`ID parrain`)})
 MERGE (fils:Node {name: toString(row.`ID fils`)})
 
