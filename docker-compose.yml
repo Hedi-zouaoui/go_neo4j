@@ -40,7 +40,7 @@ services:
       - "7474:7474"  #HTTP port
       - "7687:7687"  #Bolt port
     volumes:
-      - ./neo4j/data:/data
+      - D:\neo4j_microservice:/data
       - ./import:/import
   
   
