@@ -15,7 +15,7 @@ func TestParentNode(t *testing.T) {
 	expectedNodeName := "bayrem"
 
 	t.Run("existing_node", func(t *testing.T) {
-		got, err := Parent_node(mockDriver, 9)
+		got, err := Parent_node(mockDriver, 3)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -41,7 +41,7 @@ func TestListNodesIndirect(t *testing.T) {
 	defer mockDriver.Close()
 
 	t.Run("existing_nodes", func(t *testing.T) {
-		fatherNodeID := 1 // Replace with the actual node ID you want to test
+		fatherNodeID := 13 // Replace with the actual node ID you want to test
 		nodes, err := List_nodes_indirect(mockDriver, fatherNodeID)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)

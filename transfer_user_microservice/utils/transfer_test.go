@@ -10,10 +10,9 @@ import (
 
 func TestTest_head(t *testing.T) {
 	// Create an in-memory Neo4j instance for testing
-	server := dbtest.NewDatabase()
+	mockDriver, err := neo4j.NewDriver("bolt://localhost:7687", neo4j.BasicAuth("neo4j", "12345678", ""))
+	defer mockDriver.Close()
 
-	// Connect to the test database
-	driver, err := neo4j.NewDriver(server.URI(), neo4j.BasicAuth("neo4j", "12345678", ""))
 	if err != nil {
 		t.Fatalf("Failed to connect to Neo4j: %v", err)
 	}

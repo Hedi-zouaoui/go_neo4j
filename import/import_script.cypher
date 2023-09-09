@@ -5,13 +5,13 @@ MERGE (parrain:Node {name: toString(csv.`ID parrain`)})
 MERGE (fils:Node {name: toString(csv.`ID fils`)})
 
 FOREACH (ignored IN CASE toInteger(csv.Direct) WHEN 1 THEN [1] ELSE [] END |
-    MERGE (parrain)-[rel:DIRECT]->(fils)
+    MERGE (fils)-[rel:direct]->(parrain)
     ON CREATE SET rel.type = 'direct'
     ON MATCH SET rel.type = 'direct'
 )
 
 FOREACH (ignored IN CASE toInteger(csv.Direct) WHEN 0 THEN [1] ELSE [] END |
-    MERGE (fils)-[rel:INDIRECT]->(parrain)
+    MERGE (fils)-[rel:indirect]->(parrain)
     ON CREATE SET rel.type = 'indirect'
     ON MATCH SET rel.type = 'indirect'
 );

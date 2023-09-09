@@ -30,7 +30,7 @@ services:
       - ${HOME}/dev-rabbitmq/data/:/var/lib/rabbitmq
       - ${HOME}/dev-rabbitmq/log/:/var/log/rabbitmq
     restart: always
-  neo4j:
+  neo4j_db:
     image: neo4j:4.4.19
     container_name: neo4j
     command: neo4j console --verbose
