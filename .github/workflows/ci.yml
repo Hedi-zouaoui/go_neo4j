@@ -1,0 +1,53 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+     
+        
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+  
+      - name : neo4j 
+        run : | 
+           docker run \
+                 --name testneo4j \
+                -p7474:7474 -p7687:7687 \
+                  -d \
+                   -v $HOME/neo4j/data:/data \
+                      -v $HOME/neo4j/logs:/logs \
+                      -v $HOME/import:/var/lib/neo4j/import \
+                     -v $HOME/neo4j/plugins:/plugins \
+                           --env NEO4J_AUTH=none \
+                           --env apoc.import.file.enabled=true \
+             neo4j:latest
+      - name: Install Cypher-Shell
+        run: |
+          wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
+          echo 'deb https://debian.neo4j.com stable 4.4' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+          sudo apt-get update
+          sudo apt-get install cypher-shell
+      - name: Import Data into Neo4j
+        run: |
+          ls import  # Verify that the import folder contains your import script and CSV file
+          cypher-shell -u neo4j -p neo4j -a bolt://localhost:7687 -f import/import_script.cypher
+      - name: Build
+        working-directory: add_user_microservice/utils
+        run: go build -v
+
+      - name: Test
+        working-directory: add_user_microservice/utils
+        run: go test -v --cover
