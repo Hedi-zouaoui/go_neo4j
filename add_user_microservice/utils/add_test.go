@@ -33,7 +33,6 @@ func TestParentNode(t *testing.T) {
 
 
 }
-
 func TestListNodesIndirect(t *testing.T) {
 	mockDriver, err := neo4j.NewDriver("bolt://localhost:7687", neo4j.BasicAuth("neo4j", "12345678", ""))
 	if err != nil {
@@ -61,17 +60,30 @@ func TestListNodesIndirect(t *testing.T) {
 		// Compare the expected nodes with the actual nodes
 		if len(*nodes) != len(expectedNodes) {
 			t.Errorf("Expected %d nodes, but got %d nodes", len(expectedNodes), len(*nodes))
+			switch {
+			case len(*nodes) < len(expectedNodes):
+				t.Errorf("Missing nodes in actual result")
+			case len(*nodes) > len(expectedNodes):
+				t.Errorf("Extra nodes in actual result")
+			}
 			return
 		}
-
+	
 		for i, expected := range expectedNodes {
 			actual := (*nodes)[i]
 			if actual.ID != expected.ID || actual.Name != expected.Name {
 				t.Errorf("Node at index %d - got %+v, wanted %+v", i, actual, expected)
+				switch {
+				case actual.ID != expected.ID:
+					t.Errorf("Mismatch in Node ID")
+				case actual.Name != expected.Name:
+					t.Errorf("Mismatch in Node Name")
+				}
 			}
 		}
 	})
 }
+
 
 
 
