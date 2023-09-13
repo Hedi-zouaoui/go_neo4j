@@ -1,8 +1,9 @@
-LOAD CSV WITH HEADERS 
+LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-ueVXdAYKaeB-gbnT--pic5awlwsOVdt7qD9ZpeMPZiggsqnNR_tJxJiqpmT6zmo7pYcHokzRBpY8/pub?output=csv' AS row
+CREATE (:Node {name: row.name , IdAd : toInteger(row.id) });
 
-FROM "https://docs.google.com/spreadsheets/d/e/2PACX-1vRsr421ImlqDv4JJf5NvjbRphlb_QMGZKAjqIbePdnNDjwLwMnT2yuXJmwCt7afXdjyS-CHCnbqYQls/pub?output=csv" AS csv fieldterminator ','
-MERGE (parrain:Node {name: toString(csv.`ID parrain`)})
-MERGE (fils:Node {name: toString(csv.`ID fils`)})
+LOAD CSV WITH HEADERS FROM "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiaR8_EGoUNFYwRmSiJO5S7IQI7tgUlZYAZkBeyYTBBsEwxhC4H1C_KUudhzUn6b2i9qUauUB2iNDD/pub?output=csv" AS csv 
+MATCH (parrain:Node {IdAd: toInteger(csv.`ID parrain`)})
+MATCH (fils:Node {IdAd: toInteger(csv.`ID fils`)})
 
 FOREACH (ignored IN CASE toInteger(csv.Direct) WHEN 1 THEN [1] ELSE [] END |
     MERGE (fils)-[rel:direct]->(parrain)

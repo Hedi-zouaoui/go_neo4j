@@ -49,7 +49,7 @@ response := &pb.AddUserResponse{
 			Err:   "" ,
 		}
 
-utils.Add_json(int(req.To) , req.Name , int(response.NewId))
+//utils.Add_json(int(req.To) , req.Name , int(response.NewId))
 
 	return response, nil
 }

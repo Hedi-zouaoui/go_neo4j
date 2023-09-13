@@ -72,7 +72,7 @@ func TransferNode(driver neo4j.Driver, req Transfer_node) Transfer_node {
 		{ID: req.To, Name: "x"},
 	}
 
-	t4, _ := Test_head(driver, int64(to[0].ID))
+	t4, _ := Test_head(driver, int64(to[0].ID) , nil )
 	fmt.Println("test t4", t4)
 	if !t4 {
 		fmt.Println("le to est le head de l arbre ")
@@ -83,8 +83,8 @@ func TransferNode(driver neo4j.Driver, req Transfer_node) Transfer_node {
 		return req
 
 	}
-	p2, _ := Parent_node(driver, int(to[0].ID))
-	t2, _ := Test_head(driver, int64(p2.ID))
+	p2, _ := Parent_node(driver, int(to[0].ID) , nil )
+	t2, _ := Test_head(driver, int64(p2.ID) , nil)
 	fmt.Println("test t2", p2)
 	if !t2 { /* le parent de TO est le HEAD de l arbre  */
 		fmt.Println("le parent de destination est le HEAD de l arbre")
@@ -113,7 +113,7 @@ func TransferNode(driver neo4j.Driver, req Transfer_node) Transfer_node {
 		if err != nil {
 			log.Fatal(err)
 		}
-		parent, err := Parent_node(driver, int(to[0].ID))
+		parent, err := Parent_node(driver, int(to[0].ID) , nil )
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -135,7 +135,37 @@ func TransferNode(driver neo4j.Driver, req Transfer_node) Transfer_node {
 
 }
 
-func Test_head(driver neo4j.Driver, head int64) (bool, error) {
+func Test_head(driver neo4j.Driver, head int64 , head_test *int ) (bool, error) {
+	if head_test != nil {
+		
+	session := driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	result, err := session.Run(`
+		MATCH (node1)-[r:direct]->()
+		WHERE node1.IdAd = $nodeID
+		RETURN COUNT(r) > 0 AS relationship_exists
+	`, map[string]interface{}{
+		"nodeID": head_test,
+	})
+	if err != nil {
+		return false, err
+	}
+
+	if result.Next() {
+		record := result.Record()
+		relationshipExists, ok := record.Get("relationship_exists")
+		if !ok {
+			return false, fmt.Errorf("failed to retrieve relationship existence")
+		}
+
+		return relationshipExists.(bool), nil
+	}
+
+	return false, nil // Relationship not found
+		
+	}else {
+
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
 
@@ -161,10 +191,47 @@ func Test_head(driver neo4j.Driver, head int64) (bool, error) {
 	}
 
 	return false, nil // Relationship not found
-
+}
+return false, nil // Relationship not found
 }
 
-func List_nodes_indirect(driver neo4j.Driver, father int) (*[]Node, error) {
+func List_nodes_indirect(driver neo4j.Driver, father int , father_test *int ) (*[]Node, error) {
+	if father_test != nil {
+
+		session := driver.NewSession(neo4j.SessionConfig{})
+		defer session.Close()
+		result, err := session.Run("MATCH (n2)-[:indirect]->(n1) WHERE n1.IdAd = $father  RETURN n2.IdAd AS id, n2.name AS name", map[string]interface{}{
+	
+			"father": father_test ,
+		})
+	
+		if err != nil {
+			return nil, err
+		}
+		nodes := []Node{}
+		for result.Next() {
+			record := result.Record()
+			ID, ok := record.Get("id")
+			if !ok {
+				return nil, fmt.Errorf("failed to retrieve node id")
+			}
+	
+			Name, ok := record.Get("name")
+			if !ok {
+				return nil, fmt.Errorf("failed to retrieve node name")
+			}
+	
+			node := Node{
+				ID:   ID.(int64),
+				Name: Name.(string),
+			}
+			nodes = append(nodes, node)
+		}
+	
+		return &nodes, nil
+
+		
+	} else {
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
 	result, err := session.Run("MATCH (n2)-[:indirect]->(n1) WHERE id(n1) = $father   RETURN id(n2) AS id, n2.name AS name", map[string]interface{}{
@@ -196,7 +263,7 @@ func List_nodes_indirect(driver neo4j.Driver, father int) (*[]Node, error) {
 	}
 
 	return &nodes, nil
-
+	} 
 }
 func Delete_relation(driver neo4j.Driver, start_node *[]Node, end_nodes *[]Node) error {
 	session := driver.NewSession(neo4j.SessionConfig{})
@@ -288,7 +355,42 @@ func Move_from_to_direct(driver neo4j.Driver, from_node int, to_node int) error 
 	return nil
 }
 
-func Parent_node(driver neo4j.Driver, from_node int) (*Node, error) {
+func Parent_node(driver neo4j.Driver, from_node int , IdAd *int ) (*Node, error) {
+
+	if IdAd != nil { 
+		session := driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+	result, err := session.Run("MATCH (node)-[:direct]->(node1) WHERE node.IdAd = 4 RETURN node1.IdAd AS id, node1.name AS name", map[string]interface{}{
+		"from_node": IdAd,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Next() {
+		record := result.Record()
+
+		ID, ok := record.Get("id")
+		if !ok {
+			return nil, fmt.Errorf("failed to retrieve node id")
+		}
+
+		Name, ok := record.Get("name")
+		if !ok {
+			return nil, fmt.Errorf("failed to retrieve node name")
+		}
+
+		node := &Node{
+			ID:   ID.(int64),
+			Name: Name.(string),
+		}
+		return node, nil
+	}
+
+	return nil, fmt.Errorf("node not found")
+
+	}else {
+
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
 	result, err := session.Run("MATCH (node)-[:direct]->(node1) WHERE id(node) = $from_node RETURN id(node1) AS id, node1.name AS name", map[string]interface{}{
@@ -319,6 +421,7 @@ func Parent_node(driver neo4j.Driver, from_node int) (*Node, error) {
 	}
 
 	return nil, fmt.Errorf("node not found")
+} 
 }
 
 func GetNodeWithDirectRelationship(driver neo4j.Driver, from_node int) (*Node, error) {
@@ -352,7 +455,7 @@ func GetNodeWithDirectRelationship(driver neo4j.Driver, from_node int) (*Node, e
 
 		return node, nil
 	}
-	p, _ := Parent_node(driver, from_node)
+	p, _ := Parent_node(driver, from_node , nil)
 	return p, nil // No node found with direct relationship
 }
 

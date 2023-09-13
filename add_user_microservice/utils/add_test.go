@@ -11,11 +11,12 @@ func TestParentNode(t *testing.T) {
 	defer mockDriver.Close()
 
 	// Define constants for test values
-	expectedNodeID := int64(1)
-	expectedNodeName := "bayrem"
+	expectedNodeID := int64(6)
+	expectedNodeName := "amine"
 
 	t.Run("existing_node", func(t *testing.T) {
-		got, err := Parent_node(mockDriver, 3)
+		idAd := 4
+		got, err := Parent_node(mockDriver, 0 , &idAd)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -41,21 +42,19 @@ func TestListNodesIndirect(t *testing.T) {
 	defer mockDriver.Close()
 
 	t.Run("existing_nodes", func(t *testing.T) {
-		fatherNodeID := 13 // Replace with the actual node ID you want to test
-		nodes, err := List_nodes_indirect(mockDriver, fatherNodeID)
+		fatherNodeID := 30 // Replace with the actual node ID you want to test
+		nodes, err := List_nodes_indirect(mockDriver, 0 , &fatherNodeID)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
 		// Define expected nodes based on your test setup
 		expectedNodes := []Node{
-			{ID: 17, Name: "racem"},
+			{ID: 45, Name: "mariem"},
 	
-			{ID: 14, Name: "amira"},
+			{ID: 98, Name: "nacef"},
 			
 			
-			{ID: 12, Name: "anas"},
-			{ID: 10, Name: "aymen"},
 			// Add more expected nodes as needed
 		}
 
@@ -83,8 +82,9 @@ func TestTestHead(t *testing.T) {
 
 	// Test case 1: Relationship exists
 	t.Run("relationship_exists", func(t *testing.T) {
-		headNodeID := int64(1) // Replace with the actual node ID you want to test
-		relationshipExists, err := Test_head(mockDriver, headNodeID)
+		headNodeID := int64(0) // Replace with the actual node ID you want to test
+		head := 38
+		relationshipExists, err := Test_head(mockDriver, headNodeID , &head )
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -97,7 +97,8 @@ func TestTestHead(t *testing.T) {
 	// Test case 2: Relationship does not exist
 	t.Run("relationship_does_not_exist", func(t *testing.T) {
 		headNodeID := int64(0) // Replace with the actual node ID you want to test
-		relationshipExists, err := Test_head(mockDriver, headNodeID)
+		head := 1
+		relationshipExists, err := Test_head(mockDriver, headNodeID , &head)
 		if err != nil {
 			t.Fatalf("expected error: %v", err)
 		}
