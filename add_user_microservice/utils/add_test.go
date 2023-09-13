@@ -50,10 +50,10 @@ func TestListNodesIndirect(t *testing.T) {
 
 		// Define expected nodes based on your test setup
 		expectedNodes := []Node{
-			{ID: 45, Name: "mariem"},
+		
 	
 			{ID: 98, Name: "nacef"},
-			
+			{ID: 45, Name: "mariem"},
 			
 			// Add more expected nodes as needed
 		}
