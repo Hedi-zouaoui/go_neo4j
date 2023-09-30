@@ -35,11 +35,7 @@ jobs:
   test:
     needs: build  # Ensure that this job depends on the "Build" job
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ci_index: [add, delete, transfer]
-        ci_total: [test]
+
     steps:
       - uses : actions/checkout@v3
       - uses : actions/setup-go@v4 
@@ -72,9 +68,7 @@ jobs:
        
         working-directory: add_user_microservice/utils
         run: go test -v
-        env:
-          CI_TOTAL: test
-          CI_INDEX: add
+        
       - name: Test the delete advisor microservice
        
         working-directory: delete_microservice/utils
