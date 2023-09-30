@@ -96,8 +96,10 @@ jobs:
             
             - name: Build and push add_user_microservice
               uses: docker/build-push-action@v5
+              
               with:
-                context: .
+                
+                context: add_user_microservice
                 file: add_user_microservice/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:add_user_microservice
