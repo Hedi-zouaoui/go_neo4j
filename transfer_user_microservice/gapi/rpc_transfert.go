@@ -50,7 +50,7 @@ t, _ := utils.Parent_node(driver, int(from[0].ID))
 		fmt.Println("la tete est le HEAD PRINCIPAL de l arbre ")
 		var nodes2 *[]utils.Node
 
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID ) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -141,7 +141,7 @@ t, _ := utils.Parent_node(driver, int(from[0].ID))
 			log.Fatal(err)
 		}
 		fmt.Println("le pere", *parent)
-		nodes2, err :=utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err :=utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -228,7 +228,7 @@ t, _ := utils.Parent_node(driver, int(from[0].ID))
 			log.Fatal(err)
 		}
 		fmt.Println("le pere", *parent)
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -305,7 +305,7 @@ t, _ := utils.Parent_node(driver, int(from[0].ID))
 
 }else  { /* to est le head de l arbre */
 		fmt.Println(" to est le head de l arbre  ")
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -365,7 +365,7 @@ t, _ := utils.Parent_node(driver, int(from[0].ID))
 	fmt.Println("test t2", p2)
 	if !t1  { /* le parent from d origine est le HEAD */
 			fmt.Println("la tete est le HEAD PRINCIPAL de l arbre WITHOUT CHILDREN ")
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -443,7 +443,7 @@ fmt.Println(nodes2)
 		if err != nil {
 			log.Fatal(err)
 		}
-nodes3, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+nodes3, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -530,7 +530,7 @@ fmt.Println("le pere", *parent)
 		fmt.Println("la famille haut d origine ", *nodes) // la famille haut d origine
 
 		
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -588,7 +588,7 @@ err = utils.Create_indirect_relations(driver, nodes , &from )
 			log.Fatal(err)
 		}
 		
-		nodes3, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes3, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -644,7 +644,7 @@ fmt.Println("le pere", *parent)
 		fmt.Println("la famille haut de tous ", *nodes) // la famille haut d origine
 
 		
-		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID))
+		nodes2, err := utils.List_nodes_indirect(driver, int(from[0].ID) , nil )
 		if err != nil {
 			log.Fatal(err)
 		}
