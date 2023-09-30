@@ -106,7 +106,6 @@ num := 14
 			{ID: 45, Name: "mariem"},
 			{ID: 98, Name: "nacef"},
 			
-			// Add more expected nodes as needed
 		}
 
 		// Compare the expected nodes with the actual nodes
