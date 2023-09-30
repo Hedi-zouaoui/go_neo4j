@@ -23,7 +23,7 @@ jobs:
 
 
       - name: Build
-        working-directory: add_user_microservice/utils
+        
         run: go build -v
 
   test:
