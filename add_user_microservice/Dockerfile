@@ -13,7 +13,7 @@ COPY . .
 
 RUN go build -o bin . 
 
-
+COPY app.env /app/app
 
 FROM alpine:latest
 
