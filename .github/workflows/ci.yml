@@ -98,7 +98,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                 context: .
-            
+                file:  add_user_microservice/Dockerfile , delete_microservice/Dockerfile , transfer_user_microservice/Dockerfile 
                 
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:latest
