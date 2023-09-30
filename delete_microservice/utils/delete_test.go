@@ -12,10 +12,11 @@ func TestParentNode(t *testing.T) {
 
 	// Define constants for test values
 	expectedNodeID := int64(1)
-	expectedNodeName := "bayrem"
+	expectedNodeName := "ahmed"
 
 	t.Run("existing_node", func(t *testing.T) {
-		got, err := Parent_node(mockDriver, 9)
+		id := 11
+		got, err := Parent_node(mockDriver, 0 , &id )
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -32,7 +33,8 @@ func TestParentNode(t *testing.T) {
 
 	t.Run("non_existing_parent", func(t *testing.T) {
 		// Test case for non-existing node
-		got, err := Parent_node(mockDriver, 0) // Assuming node with ID 99 doesn't exist
+		
+		got, err := Parent_node(mockDriver, 0 , nil ) // Assuming node with ID 99 doesn't exist
 		if err == nil {
 			t.Fatalf("Expected error, but got nil")
 		}
@@ -55,7 +57,8 @@ func TestListNodesIndirect(t *testing.T) {
 
 	// Run the function under test
 	fatherNodeID := 1 // Replace with the actual node ID you want to test
-	nodes, err := List_nodes_indirect(mockDriver, fatherNodeID)
+	id := 30 
+	nodes, err := List_nodes_indirect(mockDriver, fatherNodeID , &id )
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -63,13 +66,10 @@ func TestListNodesIndirect(t *testing.T) {
 	// Perform assertions on the result
 	// Define your expected nodes based on your test setup
 	expectedNodes := []Node{
-		{ID: 17, Name: "racem"},
+		{ID: 45, Name: "mariem"},
 	
-		{ID: 14, Name: "amira"},
+		{ID: 98, Name: "nacef"},
 		
-		
-		{ID: 12, Name: "anas"},
-		{ID: 10, Name: "aymen"},
 		
 		
 	}
@@ -95,18 +95,17 @@ func TestListNodesWithRelationDirect(t *testing.T) {
 	defer mockDriver.Close()
 
 	t.Run("direct_relation", func(t *testing.T) {
-		toChangeNodeID := int64(9) // Replace with the actual node ID you want to test
 		relationName := "direct"
-
-		nodes, err := List_nodes_with_relation_direct(mockDriver, toChangeNodeID, relationName)
+num := 14
+		nodes, err := List_nodes_with_relation_direct(mockDriver, 0 , relationName , &num )
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
 		// Define expected nodes based on your test setup
 		expectedNodes := []Node{
-			{ID: 17, Name: "racem"},
-			{ID: 10, Name: "aymen"},
+			{ID: 45, Name: "mariem"},
+			{ID: 98, Name: "nacef"},
 			
 			// Add more expected nodes as needed
 		}

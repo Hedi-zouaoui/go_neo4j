@@ -44,10 +44,39 @@ func Test_head(driver neo4j.Driver, head int64) (bool, error) {
 
 }
 
-func List_nodes_indirect(driver neo4j.Driver, father int) (*[]Node, error) {
+func List_nodes_indirect(driver neo4j.Driver, father int , father_test *int) (*[]Node, error) {
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
-	result, err := session.Run("MATCH (n2)-[:indirect]->(n1) WHERE id(n1) = $father   RETURN id(n2) AS id, n2.name AS name", map[string]interface{}{
+	if father_test != nil {
+		result, err := session.Run("MATCH (n2)-[:indirect]->(n1) WHERE n1.IdAd = $father   RETURN n2.IdAd AS id, n2.name AS name", map[string]interface{}{
+
+			"father": father_test,
+		})
+	
+		if err != nil {
+			return nil, err
+		}
+		nodes := []Node{}
+		for result.Next() {
+			record := result.Record()
+			ID, ok := record.Get("id")
+			if !ok {
+				return nil, fmt.Errorf("failed to retrieve node id")
+			}
+	
+			Name, ok := record.Get("name")
+			if !ok {
+				return nil, fmt.Errorf("failed to retrieve node name")
+			}
+	
+			node := Node{
+				ID:   ID.(int64),
+				Name: Name.(string),
+			}
+			nodes = append(nodes, node)
+			return &nodes, nil
+	}}else{
+		result, err := session.Run("MATCH (n2)-[:indirect]->(n1) WHERE id(n1) = $father   RETURN id(n2) AS id, n2.name AS name", map[string]interface{}{
 
 		"father": father,
 	})
@@ -72,11 +101,13 @@ func List_nodes_indirect(driver neo4j.Driver, father int) (*[]Node, error) {
 			ID:   ID.(int64),
 			Name: Name.(string),
 		}
-		nodes = append(nodes, node)
-	}
-
+		nodes = append(nodes, node)}
+	
+	
+	
 	return &nodes, nil
-
+	}
+	return nil , nil 
 }
 func List_nodes_with_relation(driver neo4j.Driver, to_change int64 , father *int64, relation_name string) (*[]Node, error) {
 	session := driver.NewSession(neo4j.SessionConfig{})
