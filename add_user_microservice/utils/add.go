@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
@@ -192,7 +193,7 @@ func Test_head(driver neo4j.Driver, head int64 , head_test *int ) (bool, error) 
 
 	return false, nil // Relationship not found
 }
-return false, nil // Relationship not found
+
 }
 
 func List_nodes_indirect(driver neo4j.Driver, father int , father_test *int ) (*[]Node, error) {
@@ -424,6 +425,15 @@ func Parent_node(driver neo4j.Driver, from_node int , IdAd *int ) (*Node, error)
 } 
 }
 
+
+
+
+///////////////////////// WRITE TEST FOR THIS /////////////////////////////////////////
+
+
+
+
+
 func GetNodeWithDirectRelationship(driver neo4j.Driver, from_node int) (*Node, error) {
 	session := driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
@@ -486,6 +496,9 @@ func Recursion_getNodeWithDicRelation(driver neo4j.Driver, from_node int) (*[]No
 
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 type node struct {
 	Name     string `json:"name"`
 	Value    Value  `json:"value"`
@@ -497,46 +510,46 @@ type Value struct {
 	ID   int    `json:"id"`
 }
 
-func Add_json(ParentID int, name string, id int) {
-	// Read the existing JSON data from the file
-	jsonFile := "/home/test.json"
-	data, err := ioutil.ReadFile(jsonFile)
+// AddJSON adds a new child node with the specified name and ID to the JSON data retrieved from the URL.
+func AddJSON(parentID int, name string, id int) error {
+	// Fetch JSON data from the URL
+	response, err := http.Get("https://api.jsonserve.com/WcJccb")
 	if err != nil {
-		log.Fatalf("Error reading JSON file: %v", err)
+		return fmt.Errorf("error fetching JSON data from URL: %v", err)
+	}
+	defer response.Body.Close()
+
+	// Check the HTTP status code to handle errors
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf("HTTP request failed with status: %d", response.StatusCode)
+	}
+
+	// Read the JSON data from the response body
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return fmt.Errorf("error reading JSON data from response: %v", err)
 	}
 
 	// Unmarshal the JSON data into a slice of node structs
 	var nodes []node
 	if err := json.Unmarshal(data, &nodes); err != nil {
-		log.Fatalf("Error unmarshaling JSON data: %v", err)
+		return fmt.Errorf("error unmarshaling JSON data: %v", err)
 	}
 
-	// Example: Create a new child node and add it to the parent with ID 3
-	parentID := ParentID
-	newChild := node{
-		Name:     name,
-		Value:    Value{Name: name, ID: id},
-		Children: []node{
-			// Add more children here if needed
-		},
-	}
-
-	if err := AddChildToNode(&nodes, parentID, newChild); err != nil {
-		log.Fatalf("Error adding child to node: %v", err)
+	// Find the parent node and add a new child node
+	if err := AddChildToNode(&nodes, parentID, node{Name: name, Value: Value{Name: name, ID: id}}); err != nil {
+		return fmt.Errorf("error adding child to node: %v", err)
 	}
 
 	// Marshal the updated data back to JSON
 	updatedData, err := json.MarshalIndent(nodes, "", "  ")
 	if err != nil {
-		log.Fatalf("Error marshaling JSON data: %v", err)
+		return fmt.Errorf("error marshaling JSON data: %v", err)
 	}
 
-	// Write the updated JSON data back to the file
-	if err := ioutil.WriteFile(jsonFile, updatedData, 0644); err != nil {
-		log.Fatalf("Error writing JSON file: %v", err)
-	}
-
-	fmt.Println("Child added and JSON file updated successfully.")
+	// Write the updated JSON data back to the file (or do something else with it)
+	fmt.Println(string(updatedData))
+	return nil
 }
 
 // AddChildToNode adds a new child node to the node with the specified ID.

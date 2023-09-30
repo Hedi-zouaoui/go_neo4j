@@ -48,6 +48,9 @@ jobs:
         working-directory: add_user_microservice/utils
         run: go build -v
 
-      - name: Test
+  Test :
+    runs-on: ubuntu-latest
+    steps : 
+      - name : test the add advisor microservice 
         working-directory: add_user_microservice/utils
         run: go test -v --cover
