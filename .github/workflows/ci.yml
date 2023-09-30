@@ -94,12 +94,28 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
             
-            - name: Build and push
+            - name: Build and push add_user_microservice
               uses: docker/build-push-action@v5
               with:
                 context: .
-                file:  add_user_microservice/Dockerfile , delete_microservice/Dockerfile , transfer_user_microservice/Dockerfile 
-                
+                file: add_user_microservice/Dockerfile
                 push: true
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:latest
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:add_user_microservice
+            
+            - name: Build and push delete_microservice
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                file: delete_microservice/Dockerfile
+                push: true
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:delete_microservice
+            
+            - name: Build and push transfer_user_microservice
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                file: transfer_user_microservice/Dockerfile
+                push: true
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:transfer_user_microservice
+            
         
