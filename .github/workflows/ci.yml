@@ -35,6 +35,11 @@ jobs:
   test:
     needs: build  # Ensure that this job depends on the "Build" job
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_index: [0, 1, 2, 3]
+        ci_total: [4]
     steps:
       - uses : actions/checkout@v3
       - uses : actions/setup-go@v4 
@@ -67,3 +72,6 @@ jobs:
        
         working-directory: add_user_microservice/utils
         run: go test -v --cover
+        env:
+          CI_TOTAL: ${{ matrix.ci_total }}
+          CI_INDEX: ${{ matrix.ci_index }}
