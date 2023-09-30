@@ -17,7 +17,7 @@ COPY . .
 
 # Build the microservice binary
 RUN go build -o bin .
-
+COPY app.env /app/app
 
 # Use a minimal base image for the final container
 FROM alpine:latest
