@@ -107,7 +107,7 @@ jobs:
             - name: Build and push delete_microservice
               uses: docker/build-push-action@v5
               with:
-                context: .
+                context: delete_microservice
                 file: delete_microservice/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:delete_microservice
@@ -115,7 +115,7 @@ jobs:
             - name: Build and push transfer_user_microservice
               uses: docker/build-push-action@v5
               with:
-                context: .
+                context: transfer_user_microservice
                 file: transfer_user_microservice/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:transfer_user_microservice
