@@ -11,14 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v2  # Use actions/checkout version 2
 
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v2  # Use actions/setup-go version 2
         with:
           go-version: '1.20'
 
-      - name: neo4j
+      - name: Set up Docker
+        uses: docker/setup-docker@v2  # Use docker/setup-docker version 2
+        with:
+          docker-version: '20.10.7'  # Specify the Docker version you need
+
+      - name: Start Neo4j
         run: |
           docker run \
             --name testneo4j \
@@ -49,7 +55,7 @@ jobs:
         run: go build -v
 
   test:
-    needs: build  # Ensure that this job depends on the "Build" job
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Test the add advisor microservice
