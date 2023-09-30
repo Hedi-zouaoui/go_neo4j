@@ -102,7 +102,6 @@ num := 14
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
-		// Define expected nodes based on your test setup
 		expectedNodes := []Node{
 			{ID: 45, Name: "mariem"},
 			{ID: 98, Name: "nacef"},
