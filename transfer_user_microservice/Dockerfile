@@ -1,4 +1,3 @@
-# Use the official Golang image as the base image
 FROM golang:alpine as builder
 
 ENV GO111MODULE=on
