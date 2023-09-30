@@ -80,10 +80,7 @@ jobs:
   deploy:
           runs-on: ubuntu-latest
           steps:
-            - name : dockerhub cre
-              run : | 
-               echo "${{ secrets.DOCKERHUB_USERNAME }}" 
-               echo "${{ secrets.DOCKERHUB_TOKEN }}"
+          
             - name: Checkout
               uses: actions/checkout@v4
         
