@@ -21,7 +21,7 @@ WORKDIR /app
 
 COPY --from=builder  /app/bin .
 COPY --from=builder /app/app .
-COPY utils/test.json /home
+
 
 EXPOSE 9097 8087
 
