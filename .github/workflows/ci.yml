@@ -73,5 +73,12 @@ jobs:
         working-directory: add_user_microservice/utils
         run: go test -v --cover
         env:
-          CI_TOTAL: ${{ matrix.ci_total }}
-          CI_INDEX: ${{ matrix.ci_index }}
+          CI_TOTAL: test
+          CI_INDEX: add
+      - name: Test the delete advisor microservice
+       
+        working-directory: delete_microservice/utils
+        run: go test -v --cover
+        env:
+            CI_TOTAL: test
+            CI_INDEX: delete
