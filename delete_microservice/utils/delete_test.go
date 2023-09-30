@@ -108,7 +108,7 @@ num := 14
 			
 		}
 
-		// Compare the expected nodes with the actual n
+		// Compare the expected nodes with the actual 
 		if len(*nodes) != len(expectedNodes) {
 			t.Errorf("Expected %d nodes, but got %d nodes", len(expectedNodes), len(*nodes))
 			return
