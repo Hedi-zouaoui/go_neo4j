@@ -38,8 +38,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_index: [0, 1, 2, 3]
-        ci_total: [4]
+        ci_index: [add, delete, transfer]
+        ci_total: [test]
     steps:
       - uses : actions/checkout@v3
       - uses : actions/setup-go@v4 
