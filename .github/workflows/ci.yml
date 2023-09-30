@@ -99,5 +99,5 @@ jobs:
               context: .
               file: ./Dockerfile
               push: true
-              tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa :latest
+              tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:latest
              
