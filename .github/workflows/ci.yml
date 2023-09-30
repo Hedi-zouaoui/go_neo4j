@@ -79,6 +79,7 @@ jobs:
         run: go test -v 
   deploy:
           runs-on: ubuntu-latest
+          needs: test
           steps:
           
             - name: Checkout
@@ -119,5 +120,4 @@ jobs:
                 file: transfer_user_microservice/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:transfer_user_microservice
-            
-        
+ 
