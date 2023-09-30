@@ -98,7 +98,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                 context: .
-                file: ./docker-compose
+                file: ./docker-compose.yml
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:latest
         
