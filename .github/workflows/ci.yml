@@ -22,8 +22,14 @@ jobs:
 
 
 
-      - name: Build
-        
+      - name: Build add user microservice 
+        working-directory: add_user_microservice/utils
+        run: go build -v
+      - name: Build delete user microservice 
+        working-directory: delete_microservice/utils
+        run: go build -v
+      - name: Build trasnfer user microservice 
+        working-directory: transfer_user_microservice/utils
         run: go build -v
 
   test:
