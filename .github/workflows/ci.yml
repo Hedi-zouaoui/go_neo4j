@@ -111,4 +111,11 @@ jobs:
                 file: transfer_user_microservice/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:transfer_user_microservice
+            - name: Build and push front microservice
+              uses: docker/build-push-action@v5
+              with:
+                  context: admin_microservice
+                  file: admin_microservice/Dockerfile
+                  push: true
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/golang_pfa:admin_microservice
  
