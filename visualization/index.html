@@ -24,7 +24,7 @@
       var myChart = echarts.init(document.getElementById('chart-container'));
 
       myChart.showLoading();
-      fetch('test.json')
+      fetch('test1.json')
           .then(response => response.json())
           .then(data => {
               myChart.hideLoading();
@@ -33,9 +33,9 @@
                       {
                           type: 'tree',
                           data: data , 
-                          top: 'auto',   // Adjust the top positioning as needed
+                          top: '10%' ,   // Adjust the top positioning as needed
                           left: '10%',  // Adjust the left positioning as needed
-                          bottom: 'auto', // Adjust the bottom positioning as needed
+                          bottom: '10%', // Adjust the bottom positioning as needed
                           right: '25%', // Adjust the right positioning as needed
                           
                           symbolSize: 15,
