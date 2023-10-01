@@ -25,7 +25,7 @@ jobs:
         working-directory: transfer_user_microservice/utils
         run: go build -v
   test:
-    needs: build  # Ensure that this job depends on the "Build" job
+    needs: build 
     runs-on: ubuntu-latest
     steps:
       - uses : actions/checkout@v3
