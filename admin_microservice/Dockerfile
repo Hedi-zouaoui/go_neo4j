@@ -26,7 +26,6 @@ COPY index.html /usr/share/nginx/html
 # Copy the "app" configuration file
 COPY app.env /app/app
 
-# Set the working directory inside the container
 WORKDIR /app
 
 
