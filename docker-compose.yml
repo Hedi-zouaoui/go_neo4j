@@ -65,7 +65,6 @@ services:
       - "7474:7474"  #HTTP port
       - "7687:7687"  #Bolt port
     volumes:
-      - D:\neo4j_data:/data
       - ./import:/import
       
 volumes:
