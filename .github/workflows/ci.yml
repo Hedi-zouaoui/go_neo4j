@@ -24,6 +24,8 @@ jobs:
       - name: Build trasnfer user microservice 
         working-directory: transfer_user_microservice/utils
         run: go build -v
+      - name: up 
+        run: docker-compose up
   test:
     needs: build 
     runs-on: ubuntu-latest
